@@ -6,6 +6,7 @@ public enum ReservedWords {
     INT("int"),
     IF("if"),
     ELSE("else"),
+    THEN("then"),
     RETURN("return");
 
     private final String text;
