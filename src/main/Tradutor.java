@@ -15,22 +15,35 @@ public class Tradutor {
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader("string xalala void main 123");
+        StringReader stringReader = new StringReader("int x = 20; x = x/(25-9)");
         StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
 
         boolean streamEOF = false;
-        try {
-            while(!streamEOF){
+        try
+        {
+            while(!streamEOF)
+            {
+
+                if(streamTokenizer.ttype == StreamTokenizer.TT_EOF)
+                {
+                    streamEOF = true;
+                }
 
                 streamTokenizer.nextToken();
                 String currentToken = streamTokenizer.toString();
                 System.out.println("Token: " + currentToken);
 
-                if(streamTokenizer.ttype == -1) streamEOF = true;
+
+                switch (streamTokenizer.ttype)
+                {
+                    case (StreamTokenizer.TT_WORD) :
+                        // DSAFSDAF
+                }
 
             }
 
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             e.printStackTrace();
         }
     }
