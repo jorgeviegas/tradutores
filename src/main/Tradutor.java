@@ -1,6 +1,8 @@
 package main;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -15,29 +17,46 @@ public class Tradutor {
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader("int x = 20; x = x/(25-9)");
+        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)}");
         StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
 
+        streamTokenizer.commentChar(35);
+
         boolean streamEOF = false;
+
+
+        Collection<Lexeme> lexemeList = new ArrayList<>();
+
         try
         {
             while(!streamEOF)
             {
+                streamTokenizer.nextToken();
 
                 if(streamTokenizer.ttype == StreamTokenizer.TT_EOF)
                 {
                     streamEOF = true;
                 }
 
-                streamTokenizer.nextToken();
-                String currentToken = streamTokenizer.toString();
-                System.out.println("Token: " + currentToken);
-
+                String currentTokenForDebug = streamTokenizer.toString();
+                String currentToken = streamTokenizer.sval;
+                System.out.println("Token: " + currentTokenForDebug);
 
                 switch (streamTokenizer.ttype)
                 {
                     case (StreamTokenizer.TT_WORD) :
-                        // DSAFSDAF
+
+                        try {
+
+                            ReservedWords.valueOf(currentToken.toUpperCase());
+                            System.out.println("Palavra reservada: "+ currentToken);
+                        } catch (IllegalArgumentException illegal){
+                            System.out.println("Identificador: "+ currentToken);
+                        }
+
+                    case (StreamTokenizer.TT_NUMBER) :
+                       Lexeme lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
+                       lexemeList.add(lexema);
                 }
 
             }
