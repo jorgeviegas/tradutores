@@ -12,58 +12,14 @@ public class Tradutor {
     static Pattern digits = Pattern.compile("[0-9]");
     static Pattern identifiers = Pattern.compile("([A-Za-z]([A-Za-z|[0-9]])*)");
 
-    public static void main(String[] args) {
-
-        Matcher lettersMatcher = letters.matcher("t");
-        System.out.println(lettersMatcher.matches());
-
-        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)}");
-        StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
-
-        streamTokenizer.commentChar(35);
-
-        boolean streamEOF = false;
+   public static void main(String[] args){
 
 
-        Collection<Lexeme> lexemeList = new ArrayList<>();
+       LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer();
 
-        try
-        {
-            while(!streamEOF)
-            {
-                streamTokenizer.nextToken();
+       String tokens = lexicalAnalyzer.analyze("void AlterarVetor(int * vetor, int elementos)");
 
-                if(streamTokenizer.ttype == StreamTokenizer.TT_EOF)
-                {
-                    streamEOF = true;
-                }
+        System.out.println(tokens);
+   }
 
-                String currentTokenForDebug = streamTokenizer.toString();
-                String currentToken = streamTokenizer.sval;
-                System.out.println("Token: " + currentTokenForDebug);
-
-                switch (streamTokenizer.ttype)
-                {
-                    case (StreamTokenizer.TT_WORD) :
-
-                        try {
-
-                            ReservedWords.valueOf(currentToken.toUpperCase());
-                            System.out.println("Palavra reservada: "+ currentToken);
-                        } catch (IllegalArgumentException illegal){
-                            System.out.println("Identificador: "+ currentToken);
-                        }
-
-                    case (StreamTokenizer.TT_NUMBER) :
-                       Lexeme lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
-                       lexemeList.add(lexema);
-                }
-
-            }
-
-        } catch (IOException e)
-        {
-            e.printStackTrace();
-        }
-    }
 }
