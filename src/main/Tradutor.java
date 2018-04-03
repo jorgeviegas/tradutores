@@ -17,10 +17,12 @@ public class Tradutor {
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)}");
+        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)} //teste \n /* test block */ 1+2");
         StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
-
-        streamTokenizer.commentChar(35);
+        
+        streamTokenizer.ordinaryChar('/');        //O StreamTokenizer não considera o '/' com um char comum
+        streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar commentários //
+        streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar commentários /**/
 
         boolean streamEOF = false;
 
