@@ -1,5 +1,7 @@
 package main;
 
+import com.oracle.tools.packager.Log;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,14 +19,15 @@ public class Tradutor {
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)} //teste \n /* test block */ 1+2");
+        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)} //teste \n /* test block */ 1+2 if(true == true && false == false || teste) a=1;");
         StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
         
-        streamTokenizer.ordinaryChar('/');        //O StreamTokenizer não considera o '/' com um char comum
-        streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar commentários //
-        streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar commentários /**/
+        streamTokenizer.ordinaryChar('/');        //O StreamTokenizer nï¿½o considera o '/' com um char comum
+        streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar commentï¿½rios //
+        streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar commentï¿½rios /**/
 
         boolean streamEOF = false;
+        int lastTokenType = 0;
 
 
         Collection<Lexeme> lexemeList = new ArrayList<>();
@@ -42,15 +45,15 @@ public class Tradutor {
 
                 String currentTokenForDebug = streamTokenizer.toString();
                 String currentToken = streamTokenizer.sval;
+                int tokenType = streamTokenizer.ttype;
                 System.out.println("Token: " + currentTokenForDebug);
 
-                switch (streamTokenizer.ttype)
+                switch (tokenType)
                 {
                     case (StreamTokenizer.TT_WORD) :
 
                         try {
-
-                            ReservedWords.valueOf(currentToken.toUpperCase());
+                            ReservedWords.valueOf(currentToken);
                             System.out.println("Palavra reservada: "+ currentToken);
                         } catch (IllegalArgumentException illegal){
                             System.out.println("Identificador: "+ currentToken);
@@ -59,6 +62,22 @@ public class Tradutor {
                     case (StreamTokenizer.TT_NUMBER) :
                        Lexeme lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
                        lexemeList.add(lexema);
+
+                    default:
+                       LogicalOperators AndOperator = LogicalOperators.AND;
+                       LogicalOperators OrOperator = LogicalOperators.OR;
+                       LogicalOperators NotOperator = LogicalOperators.NOT;
+                       if(AndOperator.asChar() == tokenType && AndOperator.asChar() == lastTokenType ) {
+                           System.out.println("Logical operator: " + (char) tokenType);
+                       }
+                        if(OrOperator.asChar() == tokenType && OrOperator.asChar() == lastTokenType ) {
+                            System.out.println("Logical operator: " + (char) tokenType);
+                        }
+                        if(NotOperator.asChar() == tokenType) {
+                            System.out.println("Logical operator: " + (char) tokenType);
+                        }
+                       lastTokenType = tokenType;
+
                 }
 
             }
