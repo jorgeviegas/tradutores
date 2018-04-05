@@ -1,5 +1,7 @@
 package main;
 
+import com.oracle.tools.packager.Log;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -14,12 +16,10 @@ public class Tradutor {
 
    public static void main(String[] args){
 
-
        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer();
 
        String tokens = lexicalAnalyzer.analyze("void AlterarVetor(int * vetor, int elementos)");
 
         System.out.println(tokens);
    }
-
 }

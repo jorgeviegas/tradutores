@@ -1,13 +1,24 @@
 package main;
 
 public enum ReservedWords {
-    VOID("void"),
-    MAIN("main"),
-    INT("int"),
-    IF("if"),
+    BOOL("bool"),
+    BREAK("break"),
+    DO("do"),
+    CASE("case"),
+    DOUBLE("double"),
     ELSE("else"),
+    FLOAT("float"),
+    FOR("for"),
+    IF("if"),
+    INT("int"),
+    MAIN("main"),
+    NULL("null"),
+    RETURN("return"),
+    STRING("string"),
+    SWICTH("switch"),
     THEN("then"),
-    RETURN("return");
+    VOID("void"),
+    WHILE("while");
 
     private final String text;
 
