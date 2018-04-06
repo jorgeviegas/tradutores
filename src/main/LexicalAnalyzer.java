@@ -14,12 +14,12 @@ public class LexicalAnalyzer {
     static Pattern digits = Pattern.compile("[0-9]");
     static Pattern identifiers = Pattern.compile("([A-Za-z]([A-Za-z|[0-9]])*)");
 
-    public static void main(String[] args) {
+    public void analyze(String codeToAnalyze) {
 
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader("'sda';int x = 20; {x = x/(25-9)} //teste \n /* test block */ 1+2 if(true == true && false == false || teste) a=1;");
+        StringReader stringReader = new StringReader(codeToAnalyze);
         StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
 
         streamTokenizer.ordinaryChar('/');        //O StreamTokenizer n�o considera o '/' com um char comum
