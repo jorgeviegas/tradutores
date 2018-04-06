@@ -8,7 +8,7 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Tradutor {
+public class Main {
 
    public static void main(String[] args){
 

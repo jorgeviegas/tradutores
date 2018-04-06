@@ -50,6 +50,8 @@ public class LexicalAnalyzer {
 
                 String currentTokenForDebug = streamTokenizer.toString();
                 String currentToken = streamTokenizer.sval;
+                double currentNumToken = streamTokenizer.nval;
+
                 int tokenType = streamTokenizer.ttype;
                 System.out.println("Token: " + currentTokenForDebug);
 
@@ -69,11 +71,12 @@ public class LexicalAnalyzer {
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
-                        lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
+                        lexema = new Lexeme(TokenType.NUMERICAL, String.valueOf(currentNumToken));
                         lexemeList.add(lexema);
                         break;
 
                     default:
+
                         LogicalOperators AndOperator = LogicalOperators.AND;
                         LogicalOperators OrOperator = LogicalOperators.OR;
                         LogicalOperators NotOperator = LogicalOperators.NOT;
