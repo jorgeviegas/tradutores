@@ -14,6 +14,6 @@ public class Tradutor {
 
        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer();
 
-       lexicalAnalyzer.analyze("void AlterarVetor(int * vetor, int elementos)");
+       lexicalAnalyzer.analyze();
    }
 }

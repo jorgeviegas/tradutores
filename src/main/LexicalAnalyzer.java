@@ -16,7 +16,7 @@ public class LexicalAnalyzer {
     static Pattern digits = Pattern.compile("[0-9]");
     static Pattern identifiers = Pattern.compile("([A-Za-z]([A-Za-z|[0-9]])*)");
 
-    public void analyze(String codeToAnalyze) {
+    public void analyze() {
 
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
