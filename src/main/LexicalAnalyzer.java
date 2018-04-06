@@ -3,6 +3,8 @@ package main;
 import com.oracle.tools.packager.Log;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.regex.Matcher;
@@ -19,8 +21,15 @@ public class LexicalAnalyzer {
         Matcher lettersMatcher = letters.matcher("t");
         System.out.println(lettersMatcher.matches());
 
-        StringReader stringReader = new StringReader(codeToAnalyze);
-        StreamTokenizer streamTokenizer = new StreamTokenizer(stringReader);
+        BufferedReader reader = null;
+
+        try {
+            reader = Files.newBufferedReader(Paths.get("TestCode.txt"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        StreamTokenizer streamTokenizer = new StreamTokenizer(reader);
 
         streamTokenizer.ordinaryChar('/');        //O StreamTokenizer n�o considera o '/' com um char comum
         streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar comment�rios //
