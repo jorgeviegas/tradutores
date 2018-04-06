@@ -18,7 +18,9 @@ public enum ReservedWords {
     SWICTH("switch"),
     THEN("then"),
     VOID("void"),
-    WHILE("while");
+    WHILE("while"),
+    INCLUDE("include");
+    ;
 
     private final String text;
 

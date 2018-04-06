@@ -18,9 +18,6 @@ public class LexicalAnalyzer {
 
     public void analyze() {
 
-        Matcher lettersMatcher = letters.matcher("t");
-        System.out.println(lettersMatcher.matches());
-
         BufferedReader reader = null;
 
         try {
@@ -37,7 +34,6 @@ public class LexicalAnalyzer {
 
         boolean streamEOF = false;
         int lastTokenType = 0;
-
 
         Collection<Lexeme> lexemeList = new ArrayList<>();
 
@@ -57,21 +53,23 @@ public class LexicalAnalyzer {
                 int tokenType = streamTokenizer.ttype;
                 System.out.println("Token: " + currentTokenForDebug);
 
+                Lexeme lexema = null;
+
                 switch (tokenType)
                 {
                     case (StreamTokenizer.TT_WORD) :
 
                         try {
-                            ReservedWords.valueOf(currentToken);
-                            System.out.println("Palavra reservada: "+ currentToken);
+                            ReservedWords.valueOf(currentToken.toUpperCase());
+                            lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken);
+                            lexemeList.add(lexema);
                         } catch (IllegalArgumentException illegal){
-                            System.out.println("Identificador: "+ currentToken);
                         }
 
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
-                        Lexeme lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
+                        lexema = new Lexeme(TokenType.NUMERICAL, currentToken);
                         lexemeList.add(lexema);
                         break;
 
@@ -91,6 +89,10 @@ public class LexicalAnalyzer {
                         lastTokenType = tokenType;
 
                 }
+
+                if(lexema != null)
+                System.out.println("Lexema: " + lexema.token + " Tipo: "+lexema.tokenType.toString());
+
 
             }
 
