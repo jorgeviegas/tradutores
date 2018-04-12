@@ -66,6 +66,8 @@ public class LexicalAnalyzer {
                             lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken);
                             lexemeList.add(lexema);
                         } catch (IllegalArgumentException illegal){
+                            lexema = new Lexeme(TokenType.IDENTIFIER, currentToken);
+                            lexemeList.add(lexema);
                         }
 
                         break;
@@ -76,6 +78,7 @@ public class LexicalAnalyzer {
                         break;
 
                     default:
+
 
                         LogicalOperators AndOperator = LogicalOperators.AND;
                         LogicalOperators OrOperator = LogicalOperators.OR;
