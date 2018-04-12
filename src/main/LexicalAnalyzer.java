@@ -79,6 +79,12 @@ public class LexicalAnalyzer {
 
                     default:
 
+                        SpecialCharacters specialChar = findSpecialCharactersByChar(tokenType);
+                        if (specialChar != null) {
+                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf(currentNumToken));
+                            lexemeList.add(lexema);
+                        }
+
 
                         LogicalOperators AndOperator = LogicalOperators.AND;
                         LogicalOperators OrOperator = LogicalOperators.OR;
@@ -106,5 +112,14 @@ public class LexicalAnalyzer {
         {
             e.printStackTrace();
         }
+    }
+
+    public SpecialCharacters findSpecialCharactersByChar(int chartoFind){
+        for (SpecialCharacters sc : SpecialCharacters.values()){
+            if (sc.asChar() == chartoFind ){
+                return sc;
+            }
+        }
+        return null;
     }
 }

@@ -18,5 +18,4 @@ public enum SpecialCharacters {
     SpecialCharacters(int asChar) {
         this.asChar = asChar;
     }
-
 }

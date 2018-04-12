@@ -7,5 +7,10 @@ public enum TokenType {
     LOGICAL_OPERATOR,
     IDENTIFIER,
     COMMA,
-    SEMICOLON
+    SEMICOLON,
+    EQUAL,
+    L_PAREN,
+    R_PAREN,
+    L_BRACKET,
+    R_BRACKET;
 }
