@@ -1,7 +1,5 @@
 package main;
 
-import com.oracle.tools.packager.Log;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -81,7 +79,7 @@ public class LexicalAnalyzer {
 
                         SpecialCharacters specialChar = findSpecialCharactersByChar(tokenType);
                         if (specialChar != null) {
-                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf(currentNumToken));
+                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), currentToken);
                             lexemeList.add(lexema);
                         }
 
@@ -98,6 +96,38 @@ public class LexicalAnalyzer {
                         if(NotOperator.asChar() == tokenType) {
                             System.out.println("Logical operator: " + (char) tokenType);
                         }
+                        
+                        //===============================================================
+                        
+                        ArithmeticOperators SumOperator = ArithmeticOperators.SUM;
+                        ArithmeticOperators SubOperator = ArithmeticOperators.SUB;
+                        ArithmeticOperators DivOperator = ArithmeticOperators.DIV;
+                        ArithmeticOperators MltOperator = ArithmeticOperators.MLT;
+                        ArithmeticOperators PwrOperator = ArithmeticOperators.PWR;
+                        if(SumOperator.asChar() == tokenType) {
+                            System.out.println("Arithmetic operator: " + (char) tokenType);
+                        }
+                        if(SubOperator.asChar() == tokenType) {
+                            System.out.println("Arithmetic operator: " + (char) tokenType);
+                        }
+                        if(DivOperator.asChar() == tokenType) {
+                            System.out.println("Arithmetic operator: " + (char) tokenType);
+                        }
+                        if(MltOperator.asChar() == tokenType) {
+                            System.out.println("Arithmetic operator: " + (char) tokenType);
+                        }
+                        if(PwrOperator.asChar() == tokenType) {
+                            System.out.println("Arithmetic operator: " + (char) tokenType);
+                        }
+                        
+                        ArithmeticOperators arithmeticOperator = findArithmeticOperatorsByChar(tokenType);
+                        if (arithmeticOperator != null) {
+                            lexema = new Lexeme(TokenType.ARITHMETIC_OPERATOR, String.valueOf((char)tokenType));
+                            lexemeList.add(lexema);
+                        }
+                        
+                        //===============================================================
+                        
                         lastTokenType = tokenType;
 
                 }
@@ -116,6 +146,15 @@ public class LexicalAnalyzer {
 
     public SpecialCharacters findSpecialCharactersByChar(int chartoFind){
         for (SpecialCharacters sc : SpecialCharacters.values()){
+            if (sc.asChar() == chartoFind ){
+                return sc;
+            }
+        }
+        return null;
+    }
+    
+    public ArithmeticOperators findArithmeticOperatorsByChar(int chartoFind){
+        for (ArithmeticOperators sc : ArithmeticOperators.values()){
             if (sc.asChar() == chartoFind ){
                 return sc;
             }

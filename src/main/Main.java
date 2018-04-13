@@ -1,7 +1,5 @@
 package main;
 
-import com.oracle.tools.packager.Log;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
