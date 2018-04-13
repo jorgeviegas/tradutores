@@ -5,7 +5,8 @@ public enum ArithmeticOperators {
     SUB('-'),
     DIV('/'),
 	MLT('*'),
-	PWR('^');
+	PWR('^'),
+	MOD('%');
 
     public int asChar() {
         return asChar;

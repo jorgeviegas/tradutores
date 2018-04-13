@@ -8,6 +8,8 @@ import java.util.Collection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.sun.org.apache.xpath.internal.operations.Mod;
+
 public class LexicalAnalyzer {
 
     static Pattern letters = Pattern.compile("[A-Za-z]");
@@ -100,29 +102,9 @@ public class LexicalAnalyzer {
                         
                         //===============================================================
                         
-                        ArithmeticOperators SumOperator = ArithmeticOperators.SUM;
-                        ArithmeticOperators SubOperator = ArithmeticOperators.SUB;
-                        ArithmeticOperators DivOperator = ArithmeticOperators.DIV;
-                        ArithmeticOperators MltOperator = ArithmeticOperators.MLT;
-                        ArithmeticOperators PwrOperator = ArithmeticOperators.PWR;
-                        if(SumOperator.asChar() == tokenType) {
-                            System.out.println("Arithmetic operator: " + (char) tokenType);
-                        }
-                        if(SubOperator.asChar() == tokenType) {
-                            System.out.println("Arithmetic operator: " + (char) tokenType);
-                        }
-                        if(DivOperator.asChar() == tokenType) {
-                            System.out.println("Arithmetic operator: " + (char) tokenType);
-                        }
-                        if(MltOperator.asChar() == tokenType) {
-                            System.out.println("Arithmetic operator: " + (char) tokenType);
-                        }
-                        if(PwrOperator.asChar() == tokenType) {
-                            System.out.println("Arithmetic operator: " + (char) tokenType);
-                        }
-                        
                         ArithmeticOperators arithmeticOperator = findArithmeticOperatorsByChar(tokenType);
                         if (arithmeticOperator != null) {
+                        	System.out.println("Arithmetic operator: " + (char) tokenType);
                             lexema = new Lexeme(TokenType.ARITHMETIC_OPERATOR, String.valueOf((char)tokenType));
                             lexemeList.add(lexema);
                         }
