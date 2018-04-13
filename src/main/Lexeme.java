@@ -10,4 +10,9 @@ public class Lexeme {
         this.tokenType = tokenType;
         this.token = token;
     }
+
+    @Override
+    public String toString() {
+        return "[" + tokenType.toString() + "," + token + "]";
+    }
 }

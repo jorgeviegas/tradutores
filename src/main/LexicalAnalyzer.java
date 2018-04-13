@@ -144,6 +144,11 @@ public class LexicalAnalyzer {
 
             }
 
+
+         lexemeList.forEach(lexeme -> System.out.println(lexeme.toString()));
+
+
+
         } catch (IOException e)
         {
             e.printStackTrace();
