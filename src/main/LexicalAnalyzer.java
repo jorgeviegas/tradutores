@@ -44,6 +44,7 @@ public class LexicalAnalyzer {
                 if(streamTokenizer.ttype == StreamTokenizer.TT_EOF)
                 {
                     streamEOF = true;
+                    break;
                 }
 
                 String currentTokenForDebug = streamTokenizer.toString();
@@ -79,7 +80,7 @@ public class LexicalAnalyzer {
 
                         SpecialCharacters specialChar = findSpecialCharactersByChar(tokenType);
                         if (specialChar != null) {
-                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), currentToken);
+                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf((char)tokenType));
                             lexemeList.add(lexema);
                         }
 
@@ -127,7 +128,12 @@ public class LexicalAnalyzer {
                         }
                         
                         //===============================================================
-                        
+
+                        if (lexema == null){
+                            // its a literal
+                            lexema = new Lexeme(TokenType.LITERAL, currentToken);
+                            lexemeList.add(lexema);
+                        }
                         lastTokenType = tokenType;
 
                 }
