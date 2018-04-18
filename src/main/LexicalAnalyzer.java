@@ -209,12 +209,18 @@ public class LexicalAnalyzer {
                 return null;
         }
 
-        if (lo == LogicalOperators.AND) {
-            return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.AND.toString(), 0);
+        if (lastLo == LogicalOperators.AND) {
+            if (lo == LogicalOperators.AND) {
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "&&", 0);
+            } else
+                return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.AND.toString(), 0);
         }
 
-        if (lo == LogicalOperators.OR) {
-            return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.OR.toString(), 0);
+        if (lastLo == LogicalOperators.OR) {
+            if (lo == LogicalOperators.OR) {
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "||", 0);
+            } else
+                return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.OR.toString(), 0);
         }
 
         if (lo == LogicalOperators.GREATER && lastLexeme.tokenType != TokenType.RESERVED_WORD) {
