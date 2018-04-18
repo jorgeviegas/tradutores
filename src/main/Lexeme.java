@@ -6,9 +6,20 @@ public class Lexeme {
 
     public String token;
 
-    public Lexeme(TokenType tokenType, String token) {
+    public int lineNumber;
+
+    public Lexeme(TokenType tokenType, String token, int lineNumber) {
         this.tokenType = tokenType;
         this.token = token;
+        this.lineNumber = lineNumber;
+    }
+
+    public void setLineNumber(int lineNumber) {
+        this.lineNumber = lineNumber;
+    }
+
+    public int getLineNumber() {
+        return this.lineNumber;
     }
 
     @Override

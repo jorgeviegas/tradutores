@@ -5,16 +5,17 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import com.sun.org.apache.xpath.internal.operations.Mod;
 
 public class LexicalAnalyzer {
 
     static Pattern letters = Pattern.compile("[A-Za-z]");
     static Pattern digits = Pattern.compile("[0-9]");
     static Pattern identifiers = Pattern.compile("([A-Za-z]([A-Za-z|[0-9]])*)");
+
+    private LinkedList<Lexeme> lexemeList = new LinkedList<>();
 
     public void analyze() {
 
@@ -33,9 +34,8 @@ public class LexicalAnalyzer {
         streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar comment�rios /**/
 
         boolean streamEOF = false;
+        boolean isSamelogicalOperator = false;
         int lastTokenType = 0;
-
-        Collection<Lexeme> lexemeList = new ArrayList<>();
 
         try
         {
@@ -52,6 +52,7 @@ public class LexicalAnalyzer {
                 String currentTokenForDebug = streamTokenizer.toString();
                 String currentToken = streamTokenizer.sval;
                 double currentNumToken = streamTokenizer.nval;
+                int lineNumber = streamTokenizer.lineno();
 
                 int tokenType = streamTokenizer.ttype;
                 System.out.println("Token: " + currentTokenForDebug);
@@ -64,40 +65,43 @@ public class LexicalAnalyzer {
 
                         try {
                             ReservedWords.valueOf(currentToken.toUpperCase());
-                            lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken);
+                            lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken, lineNumber);
                             lexemeList.add(lexema);
                         } catch (IllegalArgumentException illegal){
-                            lexema = new Lexeme(TokenType.IDENTIFIER, currentToken);
+                            lexema = new Lexeme(TokenType.IDENTIFIER, currentToken, lineNumber);
                             lexemeList.add(lexema);
                         }
 
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
-                        lexema = new Lexeme(TokenType.NUMERICAL, String.valueOf(currentNumToken));
+                        lexema = new Lexeme(TokenType.NUMERICAL, String.valueOf(currentNumToken), lineNumber);
                         lexemeList.add(lexema);
                         break;
 
                     default:
+                        LogicalOperators logicalOperator = findLogicalOperatorByChar(tokenType);
+                        LogicalOperators lastLogicalOperator = findLogicalOperatorByChar(lastTokenType);
+
+                        if (logicalOperator != null) {
+                            lexema = findLogicalOperator(lastLogicalOperator, logicalOperator, this.lexemeList.getLast());
+                            if (lexema != null) {
+                                if (lexemeList.getLast().tokenType == lexema.tokenType) {
+                                    isSamelogicalOperator = true;
+                                    lexemeList.removeLast();
+                                } else
+                                    isSamelogicalOperator = false;
+                                lexema.setLineNumber(lineNumber);
+                                lexemeList.add(lexema);
+                            }
+                        }
+
+                        //===============================================================
 
                         SpecialCharacters specialChar = findSpecialCharactersByChar(tokenType);
-                        if (specialChar != null) {
-                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf((char)tokenType));
+                        if (specialChar != null && lexema == null) {
+                            lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf(tokenType), lineNumber);
                             lexemeList.add(lexema);
-                        }
-
-
-                        LogicalOperators AndOperator = LogicalOperators.AND;
-                        LogicalOperators OrOperator = LogicalOperators.OR;
-                        LogicalOperators NotOperator = LogicalOperators.NOT;
-                        if(AndOperator.asChar() == tokenType && AndOperator.asChar() == lastTokenType ) {
-                            System.out.println("Logical operator: " + (char) tokenType);
-                        }
-                        if(OrOperator.asChar() == tokenType && OrOperator.asChar() == lastTokenType ) {
-                            System.out.println("Logical operator: " + (char) tokenType);
-                        }
-                        if(NotOperator.asChar() == tokenType) {
-                            System.out.println("Logical operator: " + (char) tokenType);
                         }
                         
                         //===============================================================
@@ -105,7 +109,7 @@ public class LexicalAnalyzer {
                         ArithmeticOperators arithmeticOperator = findArithmeticOperatorsByChar(tokenType);
                         if (arithmeticOperator != null) {
                         	System.out.println("Arithmetic operator: " + (char) tokenType);
-                            lexema = new Lexeme(TokenType.ARITHMETIC_OPERATOR, String.valueOf((char)tokenType));
+                            lexema = new Lexeme(TokenType.ARITHMETIC_OPERATOR, String.valueOf((char)tokenType), lineNumber);
                             lexemeList.add(lexema);
                         }
                         
@@ -113,21 +117,21 @@ public class LexicalAnalyzer {
 
                         if (lexema == null){
                             // its a literal
-                            lexema = new Lexeme(TokenType.LITERAL, currentToken);
+                            lexema = new Lexeme(TokenType.LITERAL, currentToken, lineNumber);
                             lexemeList.add(lexema);
                         }
-                        lastTokenType = tokenType;
 
                 }
+                lastTokenType = tokenType;
 
-                if(lexema != null)
-                System.out.println("Lexema: " + lexema.token + " Tipo: "+lexema.tokenType.toString());
-
+                //if(lexema != null)
+                //System.out.println("Lexema: " + lexema.token + " Tipo: "+lexema.tokenType.toString());
 
             }
 
 
-         lexemeList.forEach(lexeme -> System.out.println(lexeme.toString()));
+            printLexemeList();
+            //lexemeList.forEach(lexeme -> System.out.println(lexeme.toString()));
 
 
 
@@ -151,6 +155,74 @@ public class LexicalAnalyzer {
             if (sc.asChar() == chartoFind ){
                 return sc;
             }
+        }
+        return null;
+    }
+
+    public LogicalOperators findLogicalOperatorByChar(int chartoFind){
+        for (LogicalOperators lo : LogicalOperators.values()){
+            if (lo.asChar() == chartoFind ){
+                return lo;
+            }
+        }
+        return null;
+    }
+
+    public void printLexemeList() {
+        for (Lexeme lexeme : lexemeList)
+            if (lexeme != null)
+                System.out.println("Lexema: " + lexeme.token + " Tipo: " + lexeme.tokenType.toString() + " Linha: " + Integer.toString(lexeme.lineNumber));
+    }
+
+    public Lexeme findLogicalOperator(LogicalOperators lastLo, LogicalOperators lo, Lexeme lastLexeme) {
+        if (lastLo == LogicalOperators.EQUALS) {
+            if (lo == LogicalOperators.EQUALS) {
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "==", 0);
+            } else
+                return null;
+        }
+
+        if (lastLo == LogicalOperators.GREATER) {
+            if (lo == LogicalOperators.EQUALS)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, ">=", 0);
+            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
+            else
+                return null;
+        }
+
+        if (lastLo == LogicalOperators.LESS) {
+            if (lo == LogicalOperators.EQUALS)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "<=", 0);
+            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
+            else
+                return null;
+        }
+
+        if (lastLo == LogicalOperators.NOT) {
+            if (lo == LogicalOperators.EQUALS)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "!=", 0);
+            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.NOT.toString(), 0);
+            else
+                return null;
+        }
+
+        if (lo == LogicalOperators.AND) {
+            return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.AND.toString(), 0);
+        }
+
+        if (lo == LogicalOperators.OR) {
+            return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.OR.toString(), 0);
+        }
+
+        if (lo == LogicalOperators.GREATER && lastLexeme.tokenType != TokenType.RESERVED_WORD) {
+            return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
+        }
+
+        if (lo == LogicalOperators.LESS && lastLexeme.tokenType != TokenType.RESERVED_WORD) {
+            return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
         }
         return null;
     }
