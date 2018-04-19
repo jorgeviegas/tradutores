@@ -14,5 +14,6 @@ public enum TokenType {
     L_PAREN,
     R_PAREN,
     L_BRACKET,
-    R_BRACKET;
+    R_BRACKET,
+    SHARP;
 }

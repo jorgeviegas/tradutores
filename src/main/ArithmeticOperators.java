@@ -17,5 +17,4 @@ public enum ArithmeticOperators {
     ArithmeticOperators(int asChar) {
         this.asChar = asChar;
     }
-
 }

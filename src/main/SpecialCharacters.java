@@ -7,7 +7,9 @@ public enum SpecialCharacters {
     L_BRACKET('{'),
     R_BRACKET('}'),
     COMMA(','),
-    SEMICOLON(';');
+    SEMICOLON(';'),
+    SHARP('#');
+	
 
     public int asChar() {
         return asChar;
