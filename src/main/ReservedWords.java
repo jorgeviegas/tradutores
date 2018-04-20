@@ -20,7 +20,6 @@ public enum ReservedWords {
     VOID("void"),
     WHILE("while"),
     INCLUDE("include");
-    ;
 
     private final String text;
 

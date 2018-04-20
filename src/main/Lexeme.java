@@ -21,6 +21,14 @@ public class Lexeme {
     public int getLineNumber() {
         return this.lineNumber;
     }
+    
+    public TokenType getTokenType() {
+        return this.tokenType;
+    }
+    
+    public void setTokenType(TokenType tokenType) {
+        this.tokenType = tokenType;
+    }
 
     @Override
     public String toString() {

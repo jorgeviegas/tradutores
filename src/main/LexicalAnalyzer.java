@@ -11,10 +11,6 @@ import java.util.regex.Pattern;
 
 public class LexicalAnalyzer {
 
-    static Pattern letters = Pattern.compile("[A-Za-z]");
-    static Pattern digits = Pattern.compile("[0-9]");
-    static Pattern identifiers = Pattern.compile("([A-Za-z]([A-Za-z|[0-9]])*)");
-
     private LinkedList<Lexeme> lexemeList = new LinkedList<>();
 
     public void analyze() {
@@ -29,9 +25,9 @@ public class LexicalAnalyzer {
 
         StreamTokenizer streamTokenizer = new StreamTokenizer(reader);
 
-        streamTokenizer.ordinaryChar('/');        //O StreamTokenizer n�o considera o '/' com um char comum
-        streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar comment�rios //
-        streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar comment�rios /**/
+        streamTokenizer.ordinaryChar('/');        //O StreamTokenizer nao considera o '/' com um char comum
+        streamTokenizer.slashSlashComments(true); //Seta o StreamTokenizer para ignorar commentarios //
+        streamTokenizer.slashStarComments(true);  //Seta o StreamTokenizer para ignorar commentarios /**/
 
         boolean streamEOF = false;
         int lastTokenType = 0;
@@ -143,8 +139,7 @@ public class LexicalAnalyzer {
 
             printLexemeList();
 
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -247,11 +242,11 @@ public class LexicalAnalyzer {
                 return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.OR.toString(), 0);
         }
 
-        if (lo == LogicalOperators.GREATER && lastLexeme.tokenType != TokenType.RESERVED_WORD) {
+        if (lo == LogicalOperators.GREATER) {
             return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
         }
 
-        if (lo == LogicalOperators.LESS && lastLexeme.tokenType != TokenType.RESERVED_WORD) {
+        if (lo == LogicalOperators.LESS) {
             return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
         }
         return null;
