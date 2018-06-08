@@ -1,25 +1,18 @@
 package syntaticType;
 
 public enum ReservedWord implements IReservedWord {
+    DEF("def"),
 	BOOL("bool"),
     BREAK("break"),
-    DO("do"),
-    CASE("case"),
-    DOUBLE("double"),
     ELSE("else"),
-    FLOAT("float"),
-    FOR("for"),
     IF("if"),
     INT("int"),
-    MAIN("main"),
-    NULL("null"),
     RETURN("return"),
-    STRING("string"),
-    SWICTH("switch"),
-    THEN("then"),
     VOID("void"),
     WHILE("while"),
-    INCLUDE("include");
+    TRUE("true"),
+    FALSE("false"),
+    CONTINUE("continue");
 
     private final String text;
 
