@@ -12,6 +12,7 @@ public class SyntacticAnalyzer {
 
 
 	ISyntaticType a;
+	ISyntaticType exTokenType;
 
 	public SyntacticAnalyzer(LinkedList<Lexeme> lexemesList) {
 		this.lexemesList = lexemesList;
@@ -34,7 +35,7 @@ public class SyntacticAnalyzer {
 	}
 	
 	private void decl() {
-		if (a instanceof IReservedWord) {
+		if (exTokenType instanceof IReservedWord) {
 			
 		}
 	}

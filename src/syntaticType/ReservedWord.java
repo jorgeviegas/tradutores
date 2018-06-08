@@ -1,6 +1,6 @@
 package syntaticType;
 
-public enum ReservedWord implements ISyntaticType {
+public enum ReservedWord implements IReservedWord {
 	BOOL("bool"),
     BREAK("break"),
     DO("do"),
