@@ -39,7 +39,7 @@ public class SyntacticAnalyzer {
 		if (this.currentLexeme == l) {
 			this.advance();
 		} else {
-			//ERROR
+			error(l);
 		}
 	}
 	
