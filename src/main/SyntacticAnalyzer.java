@@ -24,8 +24,6 @@ public class SyntacticAnalyzer {
 
 	public void analyze(){
 
-
-
 		for (int i = 0;i < currentIndex;i++)
 		{
 			if (currentToken)
@@ -53,6 +51,28 @@ public class SyntacticAnalyzer {
 
 	private LinkedList<Lexeme> filterLineNumber(int lineNumber){
 		return lexemesList.stream().filter(l -> l.lineNumber == lineNumber).collect(Collectors.toCollection(LinkedList::new));
+	}
+
+	private int determineErrorColumn(Lexeme lexeme)
+	{
+		int column = 0;
+		LinkedList<Lexeme> lexemesInLine = filterLineNumber(lexeme.getLineNumber());
+
+		for (Lexeme currentLexeme : lexemesInLine) {
+			if (currentLexeme.equals(lexeme))
+			{
+				return column;
+			}
+			column =+ currentLexeme.getToken().length();
+		}
+
+		return 0;
+	}
+
+
+	private void error(Lexeme lexeme){
+		int errorLine = lexeme.getLineNumber();
+		int errorColumn = determineErrorColumn(lexeme);
 	}
 }
 
