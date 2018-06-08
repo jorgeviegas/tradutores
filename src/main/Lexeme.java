@@ -14,6 +14,14 @@ public class Lexeme {
         this.lineNumber = lineNumber;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
     public void setLineNumber(int lineNumber) {
         this.lineNumber = lineNumber;
     }
