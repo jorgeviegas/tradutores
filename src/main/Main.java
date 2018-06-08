@@ -3,6 +3,7 @@ package main;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +13,8 @@ public class Main {
 
        LexicalAnalyzer lexicalAnalyzer = new LexicalAnalyzer();
 
-       lexicalAnalyzer.analyze();
+       LinkedList<Lexeme> lexemeList = lexicalAnalyzer.analyze();
+
+       SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexemeList);
    }
 }

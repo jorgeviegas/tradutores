@@ -13,7 +13,7 @@ public class LexicalAnalyzer {
 
     private LinkedList<Lexeme> lexemeList = new LinkedList<>();
 
-    public void analyze() {
+    public LinkedList<Lexeme> analyze() {
 
         BufferedReader reader = null;
 
@@ -142,6 +142,8 @@ public class LexicalAnalyzer {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return lexemeList;
     }
 
     public SpecialCharacters findSpecialCharactersByChar(int chartoFind){

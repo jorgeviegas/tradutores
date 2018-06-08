@@ -3,9 +3,19 @@ package main;
 import syntaticType.IReservedWord;
 import syntaticType.ISyntaticType;
 
+import java.util.LinkedList;
+
 public class SyntacticAnalyzer {
 	private Lexeme currentLexeme;
+
+	private LinkedList<Lexeme> lexemesList;
+
+
 	ISyntaticType a;
+
+	public SyntacticAnalyzer(LinkedList<Lexeme> lexemesList) {
+		this.lexemesList = lexemesList;
+	}
 
 	private void consume(Lexeme l) {
 		if (this.currentLexeme == l) {
