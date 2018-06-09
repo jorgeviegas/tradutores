@@ -2,6 +2,7 @@ package main;
 
 public enum TokenType {
     RESERVED_WORD,
+    KEYWORD,
     NUMERICAL,
     LITERAL,
     LOGICAL_OPERATOR,
