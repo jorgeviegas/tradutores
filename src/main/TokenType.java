@@ -3,20 +3,11 @@ package main;
 public enum TokenType {
     RESERVED_WORD,
     KEYWORD,
+    SYMBOL,
     NUMERICAL,
     LITERAL,
     LOGICAL_OPERATOR,
     RELATIONAL_OPERATOR,
     ARITHMETIC_OPERATOR,
-    IDENTIFIER,
-    COMMA,
-    SEMICOLON,
-    EQUAL,
-    L_PAREN,
-    R_PAREN,
-    L_BRACKET,
-    R_BRACKET,
-    L_BRACE,
-    R_BRACE,
-    SHARP;
+    IDENTIFIER;
 }
