@@ -26,7 +26,7 @@ public class SyntacticAnalyzer {
 
 		for (int i = 0;i < currentIndex;i++)
 		{
-			if (currentToken)
+			//if (currentToken)
 
 
 			advance();
