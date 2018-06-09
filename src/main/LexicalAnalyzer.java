@@ -73,7 +73,7 @@ public class LexicalAnalyzer {
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
-                        lexema = new Lexeme(TokenType.NUMERICAL, String.valueOf(currentNumToken), lineNumber);
+                        lexema = new Lexeme(TokenType.DEC, String.valueOf(currentNumToken), lineNumber);
                         break;
 
                     default:
@@ -125,7 +125,7 @@ public class LexicalAnalyzer {
 
                         if (lexema == null && currentToken != null){
                             // its a literal
-                            lexema = new Lexeme(TokenType.LITERAL, currentToken, lineNumber);
+                            lexema = new Lexeme(TokenType.STR, currentToken, lineNumber);
                         }
                 }
                 
