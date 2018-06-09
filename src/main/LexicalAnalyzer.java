@@ -96,7 +96,7 @@ public class LexicalAnalyzer {
 
                         SpecialCharacters specialChar = findSpecialCharactersByChar(tokenType);
                         if (specialChar != null && lexema == null) {
-                        	lexema = new Lexeme(TokenType.valueOf(specialChar.toString()), String.valueOf((char)tokenType), lineNumber);
+                        	lexema = new Lexeme(TokenType.SYMBOL, String.valueOf((char)tokenType), lineNumber);
 
                         }
                         
