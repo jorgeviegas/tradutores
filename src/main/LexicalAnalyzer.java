@@ -67,6 +67,9 @@ public class LexicalAnalyzer {
                 {
                     case (StreamTokenizer.TT_WORD) :
                         lexema = buildWordLexeme(currentToken, lineNumber);
+                        if (lexema.tokenType == TokenType.HEX) {
+                            lastLexeme = null;
+                        }
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
@@ -149,6 +152,9 @@ public class LexicalAnalyzer {
             lexema = new Lexeme(TokenType.KEYWORD, currentToken, lineNumber);
         } else if (enumContains(ReservedWord.class, currentToken.toUpperCase())) {
             lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken, lineNumber);
+        } else if (isHexToken(currentToken)) {
+            currentToken = "0" + currentToken;
+            lexema = new Lexeme(TokenType.HEX, currentToken, lineNumber);
         } else {
             lexema = new Lexeme(TokenType.IDENTIFIER, currentToken, lineNumber);
         }
@@ -160,6 +166,11 @@ public class LexicalAnalyzer {
             lexeme.tokenType == TokenType.RESERVED_WORD)
             return true;
         return false;
+    }
+
+    private boolean isHexToken(String token) {
+        boolean isHex = token.matches("[xX][0-9a-fA-F]+");
+        return isHex;
     }
 
     public static <E extends Enum<E>> boolean enumContains(Class<E> _enumClass, String value) {
