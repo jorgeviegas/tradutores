@@ -6,8 +6,5 @@ public enum TokenType {
     SYMBOL,
     NUMERICAL,
     LITERAL,
-    LOGICAL_OPERATOR,
-    RELATIONAL_OPERATOR,
-    ARITHMETIC_OPERATOR,
     IDENTIFIER;
 }

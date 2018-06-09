@@ -88,7 +88,7 @@ public class LexicalAnalyzer {
                                 lexema.setLineNumber(lineNumber);
                                 
                             } else {
-                            	lexema = new Lexeme(TokenType.LOGICAL_OPERATOR, String.valueOf((char)tokenType), lineNumber);
+                            	lexema = new Lexeme(TokenType.SYMBOL, String.valueOf((char)tokenType), lineNumber);
                             }
                         }
 
@@ -114,7 +114,7 @@ public class LexicalAnalyzer {
                              lexema.setLineNumber(lineNumber);
                              
                         	} else {
-                        		lexema = new Lexeme(TokenType.ARITHMETIC_OPERATOR, String.valueOf((char)tokenType), lineNumber);
+                        		lexema = new Lexeme(TokenType.SYMBOL, String.valueOf((char)tokenType), lineNumber);
                         	}
                         }
                         
@@ -207,13 +207,13 @@ public class LexicalAnalyzer {
     public Lexeme findArithmeticOperator(ArithmeticOperators lastOp, ArithmeticOperators currentOp) {
     	if (lastOp == ArithmeticOperators.SUM) {
             if (currentOp == ArithmeticOperators.SUM) {
-                return new Lexeme(TokenType.ARITHMETIC_OPERATOR, "++", 0);
+                return new Lexeme(TokenType.SYMBOL, "++", 0);
             }
         }
     	
     	if (lastOp == ArithmeticOperators.SUB) {
             if (currentOp == ArithmeticOperators.SUB) {
-                return new Lexeme(TokenType.ARITHMETIC_OPERATOR, "--", 0);
+                return new Lexeme(TokenType.SYMBOL, "--", 0);
             }
     	}
     	
@@ -223,58 +223,58 @@ public class LexicalAnalyzer {
     public Lexeme findLogicalOperator(LogicalOperators lastLo, LogicalOperators lo, Lexeme lastLexeme) {
         if (lastLo == LogicalOperators.EQUALS) {
             if (lo == LogicalOperators.EQUALS) {
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "==", 0);
+                return new Lexeme(TokenType.SYMBOL, "==", 0);
             } else
                 return null;
         }
 
         if (lastLo == LogicalOperators.GREATER) {
             if (lo == LogicalOperators.EQUALS)
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, ">=", 0);
+                return new Lexeme(TokenType.SYMBOL, ">=", 0);
             else if (!isWordLexeme(lastLexeme))
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
+                return new Lexeme(TokenType.SYMBOL, LogicalOperators.GREATER.toString(), 0);
             else
                 return null;
         }
 
         if (lastLo == LogicalOperators.LESS) {
             if (lo == LogicalOperators.EQUALS)
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "<=", 0);
+                return new Lexeme(TokenType.SYMBOL, "<=", 0);
             else if (!isWordLexeme(lastLexeme))
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
+                return new Lexeme(TokenType.SYMBOL, LogicalOperators.LESS.toString(), 0);
             else
                 return null;
         }
 
         if (lastLo == LogicalOperators.NOT) {
             if (lo == LogicalOperators.EQUALS)
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "!=", 0);
+                return new Lexeme(TokenType.SYMBOL, "!=", 0);
             else if (!isWordLexeme(lastLexeme))
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.NOT.toString(), 0);
+                return new Lexeme(TokenType.SYMBOL, LogicalOperators.NOT.toString(), 0);
             else
                 return null;
         }
 
         if (lastLo == LogicalOperators.AND) {
             if (lo == LogicalOperators.AND) {
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "&&", 0);
+                return new Lexeme(TokenType.SYMBOL, "&&", 0);
             } else
-                return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.AND.toString(), 0);
+                return new Lexeme(TokenType.SYMBOL, LogicalOperators.AND.toString(), 0);
         }
 
         if (lastLo == LogicalOperators.OR) {
             if (lo == LogicalOperators.OR) {
-                return new Lexeme(TokenType.RELATIONAL_OPERATOR, "||", 0);
+                return new Lexeme(TokenType.SYMBOL, "||", 0);
             } else
-                return new Lexeme(TokenType.LOGICAL_OPERATOR, LogicalOperators.OR.toString(), 0);
+                return new Lexeme(TokenType.SYMBOL, LogicalOperators.OR.toString(), 0);
         }
 
         if (lo == LogicalOperators.GREATER) {
-            return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
+            return new Lexeme(TokenType.SYMBOL, LogicalOperators.GREATER.toString(), 0);
         }
 
         if (lo == LogicalOperators.LESS) {
-            return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
+            return new Lexeme(TokenType.SYMBOL, LogicalOperators.LESS.toString(), 0);
         }
         return null;
     }
