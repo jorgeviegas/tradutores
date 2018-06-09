@@ -1,18 +1,18 @@
 package syntaticType;
 
 public enum ReservedWord implements IReservedWord {
-    DEF("def"),
-	BOOL("bool"),
-    BREAK("break"),
-    ELSE("else"),
-    IF("if"),
-    INT("int"),
-    RETURN("return"),
-    VOID("void"),
-    WHILE("while"),
-    TRUE("true"),
-    FALSE("false"),
-    CONTINUE("continue");
+    FOR("for"),
+    CALLOUT("callout"),
+    CLASS("class"),
+    INTERFACE("interface"),
+    EXTENDS("extends"),
+    IMPLEMENTS("implements"),
+    NEW("new"),
+    THIS("this"),
+    STRING("string"),
+    FLOAT("float"),
+    DOUBLE("double"),
+    NULL("null");
 
     private final String text;
 
@@ -24,4 +24,5 @@ public enum ReservedWord implements IReservedWord {
     public String toString() {
         return text;
     }
+
 }
