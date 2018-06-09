@@ -1,10 +1,14 @@
 package main;
 
+import syntaticType.Keyword;
+import syntaticType.ReservedWord;
+
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -62,14 +66,7 @@ public class LexicalAnalyzer {
                 switch (tokenType)
                 {
                     case (StreamTokenizer.TT_WORD) :
-
-                        try {
-                            ReservedWords.valueOf(currentToken.toUpperCase());
-                            lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken, lineNumber);
-                        } catch (IllegalArgumentException illegal){
-                            lexema = new Lexeme(TokenType.IDENTIFIER, currentToken, lineNumber);
-                        }
-
+                        lexema = buildWordLexeme(currentToken, lineNumber);
                         break;
 
                     case (StreamTokenizer.TT_NUMBER) :
@@ -146,6 +143,34 @@ public class LexicalAnalyzer {
         return lexemeList;
     }
 
+    private Lexeme buildWordLexeme(String currentToken, int lineNumber) {
+        Lexeme lexema;
+        if(enumContains(Keyword.class, currentToken.toUpperCase())) {
+            lexema = new Lexeme(TokenType.KEYWORD, currentToken, lineNumber);
+        } else if (enumContains(ReservedWord.class, currentToken.toUpperCase())) {
+            lexema = new Lexeme(TokenType.RESERVED_WORD, currentToken, lineNumber);
+        } else {
+            lexema = new Lexeme(TokenType.IDENTIFIER, currentToken, lineNumber);
+        }
+        return lexema;
+    }
+
+    private boolean isWordLexeme(Lexeme lexeme) {
+        if (lexeme.tokenType == TokenType.KEYWORD ||
+            lexeme.tokenType == TokenType.RESERVED_WORD)
+            return true;
+        return false;
+    }
+
+    public static <E extends Enum<E>> boolean enumContains(Class<E> _enumClass, String value) {
+        try {
+            return EnumSet.allOf(_enumClass)
+                    .contains(Enum.valueOf(_enumClass, value));
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
     public SpecialCharacters findSpecialCharactersByChar(int chartoFind){
         for (SpecialCharacters sc : SpecialCharacters.values()){
             if (sc.asChar() == chartoFind ){
@@ -206,7 +231,7 @@ public class LexicalAnalyzer {
         if (lastLo == LogicalOperators.GREATER) {
             if (lo == LogicalOperators.EQUALS)
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, ">=", 0);
-            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+            else if (!isWordLexeme(lastLexeme))
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.GREATER.toString(), 0);
             else
                 return null;
@@ -215,7 +240,7 @@ public class LexicalAnalyzer {
         if (lastLo == LogicalOperators.LESS) {
             if (lo == LogicalOperators.EQUALS)
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, "<=", 0);
-            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+            else if (!isWordLexeme(lastLexeme))
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.LESS.toString(), 0);
             else
                 return null;
@@ -224,7 +249,7 @@ public class LexicalAnalyzer {
         if (lastLo == LogicalOperators.NOT) {
             if (lo == LogicalOperators.EQUALS)
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, "!=", 0);
-            else if (lastLexeme.tokenType != TokenType.RESERVED_WORD)
+            else if (!isWordLexeme(lastLexeme))
                 return new Lexeme(TokenType.RELATIONAL_OPERATOR, LogicalOperators.NOT.toString(), 0);
             else
                 return null;
