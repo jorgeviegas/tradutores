@@ -36,11 +36,20 @@ public class SyntacticAnalyzer {
 	}
 
 	private void consume(Lexeme l) {
-		if (this.currentLexeme == l) {
+		if (this.currentLexeme == l) {// Não tem outro lexema para comparar, a não ser o proprio current
 			this.advance();
-		} else {
-			error(l);
-		}
+		} else { // o currentLexeme sempre vai ser igual a ele mesmo, não faz sentido 
+			error(l); // Outro motivo, é que aqui o erro seria generalizado, pois o consume não sabe de onde é chamado
+					  // O ideal é que cada função chame o seu próprio error, podendo indicar os valores esperados...
+		}             // Ex.: Erro linha(x), coluna(y): valor inesperado 'value'. As possibilidades de valores aqui são 'a', 'b' ou 'c'... 
+	}
+	
+	private void consume(TokenType type) {
+		if (this.currentLexeme.tokenType == type) {
+			this.advance();
+		} else { 
+			error(this.currentLexeme);
+		} 
 	}
 	
 	private void advance() {
@@ -49,6 +58,124 @@ public class SyntacticAnalyzer {
 		currentToken = currentLexeme.getToken();
 	}
 
+	private void program() {
+		try {
+			this.var();
+			this.func();
+		} 
+		catch (Exception e) {
+			
+		}
+	}
+	
+	private void var() {
+		this.type();
+		this.consume(TokenType.IDENTIFIER);
+			
+		if (this.currentToken == "[") {
+			this.consume(TokenType.SYMBOL);
+			this.consume(TokenType.DEC);
+			
+			if (this.currentToken == "]") {
+				this.consume(TokenType.SYMBOL);
+			} else {
+				//ERROR
+			}
+		} else if (this.currentToken == ";") {
+			this.consume(TokenType.SYMBOL);
+		} else {
+			//ERROR
+		}		
+	}
+	
+	private void func() {
+		if (this.currentToken == "def") {
+			this.consume(TokenType.KEYWORD);
+		}
+		
+		this.type();
+		this.consume(TokenType.IDENTIFIER);
+		
+		if (this.currentToken == "(") {
+			this.consume(TokenType.SYMBOL);
+		} else {
+			//ERROR
+		}
+		
+		this.paramList();
+		
+		if (this.currentToken == ")") {
+			this.consume(TokenType.SYMBOL);
+		} else {
+			//ERROR
+		}
+		
+		this.block();
+	}
+	
+	private void paramList() {
+		this.type();
+		this.consume(TokenType.IDENTIFIER);
+		
+		while (this.currentToken == ",") {
+			this.consume(TokenType.SYMBOL);
+			this.consume(TokenType.IDENTIFIER);
+		}
+	}
+	
+	private void block() {
+		while (this.currentToken == "int" ||
+			   this.currentToken == "bool" ||
+			   this.currentToken == "void") {
+			this.var();
+		}
+		
+		while (this.currentLexeme.tokenType == TokenType.IDENTIFIER ||
+			   this.currentToken == "if" ||
+			   this.currentToken == "while" ||
+			   this.currentToken == "return" ||
+			   this.currentToken == "break" ||
+			   this.currentToken == "return") {
+			this.stmt();
+		}
+	}
+	
+	private void stmt() {
+		
+	}
+	
+	private void expr() {
+		
+	}
+	
+	private void type() {
+		if (this.currentToken == "int" ||
+			 this.currentToken == "bool" ||
+			 this.currentToken == "void") {
+			this.consume(TokenType.KEYWORD);						
+		} else {
+			this.error(this.currentLexeme);
+			//OU
+			//throw new TypeException()
+		}
+	}
+	
+	private void loc() {
+		
+	}
+	
+	private void funcCall() {
+		
+	}
+	
+	private void argList() {
+		
+	}
+	
+	private void lit() {
+		
+	}
+	
 	private LinkedList<Lexeme> filterLineNumber(int lineNumber){
 		return lexemesList.stream().filter(l -> l.lineNumber == lineNumber).collect(Collectors.toCollection(LinkedList::new));
 	}
@@ -68,7 +195,6 @@ public class SyntacticAnalyzer {
 
 		return 0;
 	}
-
 
 	private void error(Lexeme lexeme){
 		int errorLine = lexeme.getLineNumber();
