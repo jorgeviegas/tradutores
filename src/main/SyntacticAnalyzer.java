@@ -471,6 +471,10 @@ public class SyntacticAnalyzer {
 				this.isLit());
 	}
 	
+	private boolean isFunc() {
+		return (this.currentLexeme.tokenType == TokenType.SYMBOL && this.currentToken.equals("("));
+	}
+	
 	private LinkedList<Lexeme> filterLineNumber(int lineNumber){
 		return lexemesList.stream().filter(l -> l.lineNumber == lineNumber).collect(Collectors.toCollection(LinkedList::new));
 	}
