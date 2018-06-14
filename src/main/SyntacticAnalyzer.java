@@ -8,6 +8,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.sun.istack.internal.Nullable;
+
+import exceptions.UnexpectedSymbolException;
+
 public class SyntacticAnalyzer {
 	private Lexeme currentLexeme;
 	private String currentToken;
@@ -55,7 +59,8 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void var() {
+	private void var() 
+			throws UnexpectedSymbolException {
 		this.type();
 		this.consume(TokenType.IDENTIFIER);
 			
@@ -66,16 +71,17 @@ public class SyntacticAnalyzer {
 			if (this.currentToken == "]") {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				//ERROR
+				throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, "]");
 			}
 		} else if (this.currentToken == ";") {
 			this.consume(TokenType.SYMBOL);
 		} else {
-			//ERROR
+			throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 		}		
 	}
 	
-	private void func() {
+	private void func()
+			throws UnexpectedSymbolException {
 		if (this.currentToken == "def") {
 			this.consume(TokenType.KEYWORD);
 		}
@@ -86,7 +92,7 @@ public class SyntacticAnalyzer {
 		if (this.currentToken == "(") {
 			this.consume(TokenType.SYMBOL);
 		} else {
-			//ERROR
+			throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, "(");
 		}
 		
 		this.paramList();
@@ -94,7 +100,7 @@ public class SyntacticAnalyzer {
 		if (this.currentToken == ")") {
 			this.consume(TokenType.SYMBOL);
 		} else {
-			//ERROR
+			throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ")");
 		}
 		
 		this.block();
@@ -127,7 +133,8 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void stmt() {
+	private void stmt() 
+			throws UnexpectedSymbolException {
 		if (this.isLoc()) {
 			this.loc();
 			
@@ -135,7 +142,7 @@ public class SyntacticAnalyzer {
 				this.consume(TokenType.SYMBOL);
 			}
 			else {
-				//ERROR
+				throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, "=");
 			}
 			
 			this.expr();
@@ -143,7 +150,7 @@ public class SyntacticAnalyzer {
 			if (this.currentToken == ";") {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				//ERROR
+				throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 			}
 		} else if (this.isFuncCall()) {
 			this.funcCall();
@@ -151,7 +158,7 @@ public class SyntacticAnalyzer {
 			if (this.currentToken == ";") {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				//ERROR
+				throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 			}
 		} else {
 			switch (this.currentToken) {
@@ -161,7 +168,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == "(") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, "(");
 					}
 					
 					this.expr();
@@ -169,7 +176,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == ")") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ")");
 					}
 					
 					this.block();
@@ -187,7 +194,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == "(") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, "(");
 					}
 					
 					this.expr();
@@ -195,7 +202,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == ")") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ")");
 					}
 					
 					this.block();
@@ -212,7 +219,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == ";") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 					}
 					
 					break;
@@ -223,7 +230,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == ";") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 					}
 					
 					break;
@@ -234,7 +241,7 @@ public class SyntacticAnalyzer {
 					if (this.currentToken == ";") {
 						this.consume(TokenType.SYMBOL);
 					} else {
-						//ERROR
+						throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ";");
 					}
 					
 					break;
@@ -383,12 +390,10 @@ public class SyntacticAnalyzer {
 				this.currentLexeme.tokenType == TokenType.IDENTIFIER);
 	}
 	
-	
 	private boolean isFuncCall() {
 		return (this.lexemesList.get(this.currentIndex + 1).token == "(" &&
 				this.currentLexeme.tokenType == TokenType.IDENTIFIER);
 	}
-	
 	
 	private boolean isLit() {
 		return (this.currentLexeme.tokenType == TokenType.DEC ||
@@ -399,7 +404,6 @@ public class SyntacticAnalyzer {
 				  this.currentToken == "false")));
 	}
 	
-	
 	private boolean isUNOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
 				(this.currentToken == "++" ||
@@ -407,7 +411,6 @@ public class SyntacticAnalyzer {
 				 this.currentToken == "%" ||
 				 this.currentToken == "!"));
 	}
-	
 	
 	private boolean isBINOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
@@ -426,7 +429,6 @@ public class SyntacticAnalyzer {
 				 this.currentToken == "||"));
 	}
 	
-	
 	private boolean isExpr() {
 		return ((this.currentToken == "(" && this.currentLexeme.tokenType == TokenType.SYMBOL) ||
 				this.isUNOP() ||
@@ -434,7 +436,6 @@ public class SyntacticAnalyzer {
 				this.isFuncCall() ||
 				this.isLit());
 	}
-	
 	
 	private LinkedList<Lexeme> filterLineNumber(int lineNumber){
 		return lexemesList.stream().filter(l -> l.lineNumber == lineNumber).collect(Collectors.toCollection(LinkedList::new));
@@ -456,7 +457,6 @@ public class SyntacticAnalyzer {
 		return 0;
 	}
 
-	
 	private void error(Lexeme lexeme){
 		int errorLine = lexeme.getLineNumber();
 		int errorColumn = determineErrorColumn(lexeme);
