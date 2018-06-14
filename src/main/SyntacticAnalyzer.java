@@ -50,7 +50,10 @@ public class SyntacticAnalyzer {
 	}
 
 	private void program() throws UnexpectedSymbolException {
-		this.var();
+		if (!this.isFunc()) {
+			this.var();
+		}
+	
 		this.func();
 	}
 	
