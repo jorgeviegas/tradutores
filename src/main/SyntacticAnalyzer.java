@@ -270,7 +270,7 @@ public class SyntacticAnalyzer {
 			if (this.currentToken == ")") {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				//ERROR
+				throw new UnexpectedSymbolException("UnexpectedSymbolException", this.currentLexeme, ")");
 			}
 		} else if (this.isExpr()) {
 			this.expr();
