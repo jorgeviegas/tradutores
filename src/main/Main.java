@@ -16,6 +16,11 @@ public class Main {
        LinkedList<Lexeme> lexemeList = lexicalAnalyzer.analyze();
 
        SyntacticAnalyzer syntacticAnalyzer = new SyntacticAnalyzer(lexemeList);
-       syntacticAnalyzer.analyze();
+
+       try {
+           syntacticAnalyzer.analyze();
+       } catch (Exception e) {
+           e.printStackTrace();
+       }
    }
 }

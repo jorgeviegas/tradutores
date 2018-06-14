@@ -26,13 +26,13 @@ public class SyntacticAnalyzer {
 		this.currentToken = this.currentLexeme.getToken();
 	}
 
-	public void analyze(){
+	public void analyze() throws UnexpectedSymbolException {
 
-		for (int i = 0;i < currentIndex;i++)
-		{
+		//for (int i = 0;i < lexemesList.size();i++)
+		//{
 			this.program();
 			this.advance();
-		}
+		//}
 	}
 	
 	private void consume(TokenType type) {
@@ -49,14 +49,9 @@ public class SyntacticAnalyzer {
 		currentToken = currentLexeme.getToken();
 	}
 
-	private void program() {
-		try {
-			this.var();
-			this.func();
-		} 
-		catch (Exception e) {
-			
-		}
+	private void program() throws UnexpectedSymbolException {
+		this.var();
+		this.func();
 	}
 	
 	private void var() 
