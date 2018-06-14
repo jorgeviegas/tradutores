@@ -8,7 +8,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.sun.istack.internal.Nullable;
+//import com.sun.istack.internal.Nullable;
 
 import exceptions.UnexpectedSymbolException;
 
@@ -124,7 +124,7 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void block() {
+	private void block() throws UnexpectedSymbolException {
 		while (this.currentToken == "int" ||
 			   this.currentToken == "bool" ||
 			   this.currentToken == "void") {
@@ -141,7 +141,7 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void stmt() 
+	private void stmt()
 			throws UnexpectedSymbolException {
 		if (this.isLoc()) {
 			this.loc();
@@ -359,7 +359,7 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void funcCall() {
+	private void funcCall() throws UnexpectedSymbolException {
 		if (this.currentLexeme.tokenType == TokenType.IDENTIFIER) {
 			this.consume(TokenType.IDENTIFIER);
 		} else {
@@ -383,7 +383,7 @@ public class SyntacticAnalyzer {
 		}
 	}
 	
-	private void argList() {
+	private void argList() throws UnexpectedSymbolException {
 		while (this.isExpr()) {
 			this.expr();
 			
