@@ -62,18 +62,18 @@ public class SyntacticAnalyzer {
 		this.type();
 		this.consume(TokenType.IDENTIFIER);
 			
-		if (this.currentToken == "[") {
+		if (this.currentToken.equals("[")) {
 			this.consume(TokenType.SYMBOL);
 			this.consume(TokenType.DEC);
 			
-			if (this.currentToken == "]") {
+			if (this.currentToken.equals("]")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				int line = this.currentLexeme.getLineNumber();
 				int column = determineErrorColumn(this.currentLexeme);
 				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "]");
 			}
-		} else if (this.currentToken == ";") {
+		} else if (this.currentToken.equals(";")) {
 			this.consume(TokenType.SYMBOL);
 		} else {
 			int line = this.currentLexeme.getLineNumber();
@@ -84,14 +84,14 @@ public class SyntacticAnalyzer {
 	
 	private void func()
 			throws UnexpectedSymbolException {
-		if (this.currentToken == "def") {
+		if (this.currentToken.equals("def")) {
 			this.consume(TokenType.KEYWORD);
 		}
 		
 		this.type();
 		this.consume(TokenType.IDENTIFIER);
 		
-		if (this.currentToken == "(") {
+		if (this.currentToken.equals("(")) {
 			this.consume(TokenType.SYMBOL);
 		} else {
 			int line = this.currentLexeme.getLineNumber();
@@ -101,7 +101,7 @@ public class SyntacticAnalyzer {
 		
 		this.paramList();
 		
-		if (this.currentToken == ")") {
+		if (this.currentToken.equals(")")) {
 			this.consume(TokenType.SYMBOL);
 		} else {
 			int line = this.currentLexeme.getLineNumber();
@@ -116,25 +116,25 @@ public class SyntacticAnalyzer {
 		this.type();
 		this.consume(TokenType.IDENTIFIER);
 		
-		while (this.currentToken == ",") {
+		while (this.currentToken.equals(",")) {
 			this.consume(TokenType.SYMBOL);
 			this.consume(TokenType.IDENTIFIER);
 		}
 	}
 	
 	private void block() throws UnexpectedSymbolException {
-		while (this.currentToken == "int" ||
-			   this.currentToken == "bool" ||
-			   this.currentToken == "void") {
+		while (this.currentToken.equals("int") ||
+			   this.currentToken.equals("bool") ||
+			   this.currentToken.equals("void")) {
 			this.var();
 		}
 		
 		while (this.currentLexeme.tokenType == TokenType.IDENTIFIER ||
-			   this.currentToken == "if" ||
-			   this.currentToken == "while" ||
-			   this.currentToken == "return" ||
-			   this.currentToken == "break" ||
-			   this.currentToken == "return") {
+			   this.currentToken.equals("if") ||
+			   this.currentToken.equals("while") ||
+			   this.currentToken.equals("return") ||
+			   this.currentToken.equals("break") ||
+			   this.currentToken.equals("return")) {
 			this.stmt();
 		}
 	}
@@ -144,7 +144,7 @@ public class SyntacticAnalyzer {
 		if (this.isLoc()) {
 			this.loc();
 			
-			if (this.currentToken == "=") {
+			if (this.currentToken.equals("=")) {
 				this.consume(TokenType.SYMBOL);
 			}
 			else {
@@ -155,7 +155,7 @@ public class SyntacticAnalyzer {
 			
 			this.expr();
 			
-			if (this.currentToken == ";") {
+			if (this.currentToken.equals(";")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				int line = this.currentLexeme.getLineNumber();
@@ -165,7 +165,7 @@ public class SyntacticAnalyzer {
 		} else if (this.isFuncCall()) {
 			this.funcCall();
 			
-			if (this.currentToken == ";") {
+			if (this.currentToken.equals(";")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				int line = this.currentLexeme.getLineNumber();
@@ -177,7 +177,7 @@ public class SyntacticAnalyzer {
 				case "if":
 					this.consume(TokenType.KEYWORD);
 					
-					if (this.currentToken == "(") {
+					if (this.currentToken.equals("(")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -187,7 +187,7 @@ public class SyntacticAnalyzer {
 					
 					this.expr();
 					
-					if (this.currentToken == ")") {
+					if (this.currentToken.equals(")")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -197,7 +197,7 @@ public class SyntacticAnalyzer {
 					
 					this.block();
 					
-					if (this.currentToken == "else") {
+					if (this.currentToken.equals("else")) {
 						this.consume(TokenType.KEYWORD);
 						this.block();
 					}
@@ -207,7 +207,7 @@ public class SyntacticAnalyzer {
 				case "while":
 					this.consume(TokenType.KEYWORD);
 					
-					if (this.currentToken == "(") {
+					if (this.currentToken.equals("(")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -217,7 +217,7 @@ public class SyntacticAnalyzer {
 					
 					this.expr();
 					
-					if (this.currentToken == ")") {
+					if (this.currentToken.equals(")")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -236,7 +236,7 @@ public class SyntacticAnalyzer {
 						this.expr();
 					}
 					
-					if (this.currentToken == ";") {
+					if (this.currentToken.equals(";")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -249,7 +249,7 @@ public class SyntacticAnalyzer {
 				case "break":
 					this.consume(TokenType.KEYWORD);
 					
-					if (this.currentToken == ";") {
+					if (this.currentToken.equals(";")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -262,7 +262,7 @@ public class SyntacticAnalyzer {
 				case "continue":
                     this.consume(TokenType.KEYWORD);
 					
-					if (this.currentToken == ";") {
+					if (this.currentToken.equals(";")) {
 						this.consume(TokenType.SYMBOL);
 					} else {
 						int line = this.currentLexeme.getLineNumber();
@@ -290,11 +290,11 @@ public class SyntacticAnalyzer {
 			this.funcCall();
 		} else if (this.isLit()) {
 			this.lit();
-		} else if (this.currentToken == "(") {
+		} else if (this.currentToken.equals("(")) {
 			this.consume(TokenType.SYMBOL);
 			this.expr();
 			
-			if (this.currentToken == ")") {
+			if (this.currentToken.equals(")")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				int line = this.currentLexeme.getLineNumber();
@@ -317,9 +317,9 @@ public class SyntacticAnalyzer {
 	}
 	
 	private void type() {
-		if (this.currentToken == "int" ||
-			 this.currentToken == "bool" ||
-			 this.currentToken == "void") {
+		if (this.currentToken.equals("int") ||
+			 this.currentToken.equals("bool") ||
+			 this.currentToken.equals("void")) {
 			this.consume(TokenType.KEYWORD);						
 		} else {
 			this.error(this.currentLexeme);
@@ -336,11 +336,11 @@ public class SyntacticAnalyzer {
 			//ERROR
 		}
 		
-		if (this.currentToken == "[") {
+		if (this.currentToken.equals("[")) {
 			this.consume(TokenType.SYMBOL);
 			this.expr();
 			
-			if (this.currentToken == "]") {
+			if (this.currentToken.equals("]")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				//ERROR
@@ -364,14 +364,14 @@ public class SyntacticAnalyzer {
 			//ERROR
 		}
 		
-		if (this.currentToken == "(") {
+		if (this.currentToken.equals("(")) {
 			this.consume(TokenType.SYMBOL);
 			
 			if (this.isExpr()) {
 				this.argList();
 			}
 			
-			if (this.currentToken == ")") {
+			if (this.currentToken.equals(")")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
 				//ERROR
@@ -385,7 +385,7 @@ public class SyntacticAnalyzer {
 		while (this.isExpr()) {
 			this.expr();
 			
-			if (this.currentToken == ",") {
+			if (this.currentToken.equals(",")) {
 				this.consume(TokenType.SYMBOL);
 			} else if (!this.isExpr()) {
 				//ERROR
@@ -408,7 +408,7 @@ public class SyntacticAnalyzer {
 			break;
 			
 		case KEYWORD:
-			if (this.currentToken == "true" || this.currentToken == "false") {
+			if (this.currentToken.equals("true") || this.currentToken.equals("false")) {
 				this.consume(TokenType.KEYWORD);
 			} else {
 				//ERROR
@@ -423,12 +423,12 @@ public class SyntacticAnalyzer {
 	}
 	
 	private boolean isLoc() {
-		return (this.lexemesList.get(this.currentIndex + 1).token == "[" &&
+		return (this.lexemesList.get(this.currentIndex + 1).token.equals("[") &&
 				this.currentLexeme.tokenType == TokenType.IDENTIFIER);
 	}
 	
 	private boolean isFuncCall() {
-		return (this.lexemesList.get(this.currentIndex + 1).token == "(" &&
+		return (this.lexemesList.get(this.currentIndex + 1).token.equals("(") &&
 				this.currentLexeme.tokenType == TokenType.IDENTIFIER);
 	}
 	
@@ -437,33 +437,33 @@ public class SyntacticAnalyzer {
 				this.currentLexeme.tokenType == TokenType.HEX ||
 				this.currentLexeme.tokenType == TokenType.STR ||
 				(this.currentLexeme.tokenType == TokenType.KEYWORD && 
-				 (this.currentToken == "true" ||
-				  this.currentToken == "false")));
+				 (this.currentToken.equals("true") ||
+				  this.currentToken.equals("false"))));
 	}
 	
 	private boolean isUNOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
-				(this.currentToken == "++" ||
-				 this.currentToken == "--" ||
-				 this.currentToken == "%" ||
-				 this.currentToken == "!"));
+				(this.currentToken.equals("++") ||
+				 this.currentToken.equals("--") ||
+				 this.currentToken.equals("%")||
+				 this.currentToken.equals("!")));
 	}
 	
 	private boolean isBINOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
-				(this.currentToken == "+" ||
-				 this.currentToken == "-" ||
-				 this.currentToken == "*" ||
-				 this.currentToken == "/" ||
-				 this.currentToken == "=" ||
-				 this.currentToken == "==" ||
-				 this.currentToken == ">" ||
-				 this.currentToken == "<" ||
-				 this.currentToken == ">=" ||
-				 this.currentToken == "<=" ||
-				 this.currentToken == "!=" ||
-				 this.currentToken == "&&" ||
-				 this.currentToken == "||"));
+				(this.currentToken.equals("+")||
+				 this.currentToken.equals("-")||
+				 this.currentToken.equals("*")||
+				 this.currentToken.equals("/")||
+				 this.currentToken.equals("=")||
+				 this.currentToken.equals("==") ||
+				 this.currentToken.equals(">")||
+				 this.currentToken.equals("<")||
+				 this.currentToken.equals(">=") ||
+				 this.currentToken.equals("<=") ||
+				 this.currentToken.equals("!=") ||
+				 this.currentToken.equals("&&") ||
+				 this.currentToken.equals("||")));
 	}
 	
 	private boolean isExpr() {
