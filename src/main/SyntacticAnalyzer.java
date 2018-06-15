@@ -3,16 +3,20 @@ package main;
 import syntaticType.IReservedWord;
 import syntaticType.ISyntaticType;
 
+import java.rmi.UnexpectedException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-//import com.sun.istack.internal.Nullable;
-
+import exceptions.UnexpectedExpressionException;
 import exceptions.UnexpectedSymbolException;
+import exceptions.UnexpectedTokenException;
+import exceptions.UnexpectedTypeException;
 
 public class SyntacticAnalyzer {
+	private final String BINOP_OPS = "'+', '-', '*', '/', '=', '==', '>', '<', '>=', '<=', '!=', '&&' or '||'.";
+	private final String TYPE = "'void', 'int' or 'bool'.";
 	private Lexeme currentLexeme;
 	private String currentToken;
 	private int currentIndex;
@@ -71,14 +75,14 @@ public class SyntacticAnalyzer {
 			} else {
 				int line = this.currentLexeme.getLineNumber();
 				int column = determineErrorColumn(this.currentLexeme);
-				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "]");
+				throw new UnexpectedSymbolException(line, column, this.currentLexeme, "]");
 			}
 		} else if (this.currentToken.equals(";")) {
 			this.consume(TokenType.SYMBOL);
 		} else {
 			int line = this.currentLexeme.getLineNumber();
 			int column = determineErrorColumn(this.currentLexeme);
-			throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+			throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 		}		
 	}
 	
@@ -96,7 +100,7 @@ public class SyntacticAnalyzer {
 		} else {
 			int line = this.currentLexeme.getLineNumber();
 			int column = determineErrorColumn(this.currentLexeme);
-			throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "(");
+			throw new UnexpectedSymbolException(line, column, this.currentLexeme, "(");
 		}
 		
 		this.paramList();
@@ -106,7 +110,7 @@ public class SyntacticAnalyzer {
 		} else {
 			int line = this.currentLexeme.getLineNumber();
 			int column = determineErrorColumn(this.currentLexeme);
-			throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ")");
+			throw new UnexpectedSymbolException(line, column, this.currentLexeme, ")");
 		}
 		
 		this.block();
@@ -150,7 +154,7 @@ public class SyntacticAnalyzer {
 			else {
 				int line = this.currentLexeme.getLineNumber();
 				int column = determineErrorColumn(this.currentLexeme);
-				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "=");
+				throw new UnexpectedSymbolException(line, column, this.currentLexeme, "=");
 			}
 			
 			this.expr();
@@ -160,7 +164,7 @@ public class SyntacticAnalyzer {
 			} else {
 				int line = this.currentLexeme.getLineNumber();
 				int column = determineErrorColumn(this.currentLexeme);
-				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+				throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 			}
 		} else if (this.isFuncCall()) {
 			this.funcCall();
@@ -170,7 +174,7 @@ public class SyntacticAnalyzer {
 			} else {
 				int line = this.currentLexeme.getLineNumber();
 				int column = determineErrorColumn(this.currentLexeme);
-				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+				throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 			}
 		} else {
 			switch (this.currentToken) {
@@ -182,7 +186,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "(");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, "(");
 					}
 					
 					this.expr();
@@ -192,7 +196,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ")");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, ")");
 					}
 					
 					this.block();
@@ -212,7 +216,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, "(");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, "(");
 					}
 					
 					this.expr();
@@ -222,7 +226,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ")");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, ")");
 					}
 					
 					this.block();
@@ -241,7 +245,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 					}
 					
 					break;
@@ -254,7 +258,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 					}
 					
 					break;
@@ -267,7 +271,7 @@ public class SyntacticAnalyzer {
 					} else {
 						int line = this.currentLexeme.getLineNumber();
 						int column = determineErrorColumn(this.currentLexeme);
-						throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ";");
+						throw new UnexpectedSymbolException(line, column, this.currentLexeme, ";");
 					}
 					
 					break;
@@ -280,7 +284,7 @@ public class SyntacticAnalyzer {
 	}
 	
 	private void expr()
-	        throws UnexpectedSymbolException {
+	        throws UnexpectedTokenException {
 		if (this.isUNOP()) {
 			this.consume(TokenType.SYMBOL);
 			this.expr();
@@ -297,9 +301,7 @@ public class SyntacticAnalyzer {
 			if (this.currentToken.equals(")")) {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				int line = this.currentLexeme.getLineNumber();
-				int column = determineErrorColumn(this.currentLexeme);
-				throw new UnexpectedSymbolException("UnexpectedSymbolException", line, column, this.currentLexeme, ")");
+				this.throwError(new UnexpectedSymbolException(0, 0, this.currentLexeme, ")"));
 			}
 		} else if (this.isExpr()) {
 			this.expr();
@@ -307,29 +309,26 @@ public class SyntacticAnalyzer {
 			if (this.isBINOP()) {
 				this.consume(TokenType.SYMBOL);
 			} else {
-				//ERROR
+				this.throwError(new UnexpectedSymbolException(0, 0, this.currentLexeme, this.BINOP_OPS));
 			}
 			
 			this.expr();
 		} else {
-			//ERROR
+			this.throwError(new UnexpectedExpressionException(0, 0, this.currentLexeme, null));
 		}
 	}
 	
-	private void type() {
+	private void type() throws UnexpectedTokenException {
 		if (this.currentToken.equals("int") ||
 			 this.currentToken.equals("bool") ||
 			 this.currentToken.equals("void")) {
 			this.consume(TokenType.KEYWORD);						
 		} else {
-			this.error(this.currentLexeme);
-			//OU
-			//throw new TypeException()
+			this.throwError(new UnexpectedTypeException(0, 0, this.currentLexeme, this.TYPE));
 		}
 	}
 	
-	private void loc() {
-		try {
+	private void loc() throws UnexpectedSymbolException {
 		if (this.currentLexeme.tokenType == TokenType.IDENTIFIER) {
 			this.consume(TokenType.IDENTIFIER);
 		} else {
@@ -348,20 +347,20 @@ public class SyntacticAnalyzer {
 		} else {
 			//ERROR
 		}
-		} catch (UnexpectedSymbolException e) {
-			System.out.println("The \""+e.lexeme.token+"\" symbol is unexpected.");
-			
-			if (e.expectedSymbol != null && !e.expectedSymbol.isEmpty()) {
-				System.out.println("The expected symbol is \""+e.expectedSymbol+"\"");
-			}
-		}
+		//} catch (UnexpectedSymbolException e) {
+		//	System.out.println("The \""+e.lexeme.token+"\" symbol is unexpected.");
+		//	
+		//	if (e.expectedSymbol != null && !e.expectedSymbol.isEmpty()) {
+		//		System.out.println("The expected symbol is \""+e.expectedSymbol+"\"");
+		//	}
+		//}
 	}
 	
-	private void funcCall() throws UnexpectedSymbolException {
+	private void funcCall() throws UnexpectedTokenException {
 		if (this.currentLexeme.tokenType == TokenType.IDENTIFIER) {
 			this.consume(TokenType.IDENTIFIER);
 		} else {
-			//ERROR
+			this.throwError(new UnexpectedTokenException("UnexpectedIdentifier", 0, 0, this.currentLexeme, null));
 		}
 		
 		if (this.currentToken.equals("(")) {
@@ -498,9 +497,14 @@ public class SyntacticAnalyzer {
 		return 0;
 	}
 
-	private void error(Lexeme lexeme){
-		int errorLine = lexeme.getLineNumber();
-		int errorColumn = determineErrorColumn(lexeme);
+	private void throwError(UnexpectedTokenException exception) throws UnexpectedTokenException {
+		int errorLine = this.currentLexeme.getLineNumber();
+		int errorColumn = determineErrorColumn(this.currentLexeme);
+		
+		exception.line = errorLine;
+		exception.column = errorColumn;
+		
+		throw exception;
 	}
 }
 
