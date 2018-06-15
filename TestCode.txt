@@ -1,12 +1,12 @@
 def int add(int x, int y)
 {
-return x + y; // add the two parameters
-}
-def int main()
-{
-int a;
-int b;
-a = 3;
-b = 0x85E;
-return add(a, 2);
-}
+     return x; // add the two parameters
+ }
+ def int main()
+ {
+ int a;
+ int b;
+ a = 3;
+ b = 0x85E;
+ return add(a, 2);
+ }

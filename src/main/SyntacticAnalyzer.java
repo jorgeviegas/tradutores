@@ -31,7 +31,7 @@ public class SyntacticAnalyzer {
 		//for (int i = 0;i < lexemesList.size();i++)
 		//{
 			this.program();
-			this.advance();
+			//this.advance();
 		//}
 	}
 	
@@ -45,16 +45,22 @@ public class SyntacticAnalyzer {
 	
 	private void advance() {
 		currentIndex++;
+		if (currentIndex == lexemesList.size()) return;
 		currentLexeme = lexemesList.get(currentIndex);
 		currentToken = currentLexeme.getToken();
 	}
 
 	private void program() throws UnexpectedSymbolException {
-		if (!this.isFunc()) {
-			this.var();
+		while (currentToken.equals("def") || this.currentToken.equals("int") ||
+				this.currentToken.equals("bool") ||
+				this.currentToken.equals("void")) {
+
+			if (this.isFunc()) {
+				this.func();
+			} else {
+				this.var();
+			}
 		}
-	
-		this.func();
 	}
 	
 	private void var() 
@@ -118,11 +124,13 @@ public class SyntacticAnalyzer {
 		
 		while (this.currentToken.equals(",")) {
 			this.consume(TokenType.SYMBOL);
+			this.type();
 			this.consume(TokenType.IDENTIFIER);
 		}
 	}
 	
 	private void block() throws UnexpectedSymbolException {
+		this.consume(TokenType.SYMBOL);
 		while (this.currentToken.equals("int") ||
 			   this.currentToken.equals("bool") ||
 			   this.currentToken.equals("void")) {
@@ -137,6 +145,8 @@ public class SyntacticAnalyzer {
 			   this.currentToken.equals("return")) {
 			this.stmt();
 		}
+		this.consume(TokenType.SYMBOL);
+
 	}
 	
 	private void stmt()
@@ -281,10 +291,10 @@ public class SyntacticAnalyzer {
 	
 	private void expr()
 	        throws UnexpectedSymbolException {
-		if (this.isUNOP()) {
+		if (this.isUNOP() ) {
 			this.consume(TokenType.SYMBOL);
 			this.expr();
-		} else if (this.isLoc()) {
+		} else if (this.isLoc() && !isFuncCall()) {
 			this.loc();
 		} else if (this.isFuncCall()) {
 			this.funcCall();
@@ -423,8 +433,7 @@ public class SyntacticAnalyzer {
 	}
 	
 	private boolean isLoc() {
-		return (this.lexemesList.get(this.currentIndex + 1).token.equals("[") &&
-				this.currentLexeme.tokenType == TokenType.IDENTIFIER);
+		return this.currentLexeme.tokenType == TokenType.IDENTIFIER;
 	}
 	
 	private boolean isFuncCall() {
@@ -475,7 +484,7 @@ public class SyntacticAnalyzer {
 	}
 	
 	private boolean isFunc() {
-		return (this.currentLexeme.tokenType == TokenType.SYMBOL && this.currentToken.equals("("));
+		return (this.currentLexeme.tokenType == TokenType.KEYWORD && this.currentToken.equals("def"));
 	}
 	
 	private LinkedList<Lexeme> filterLineNumber(int lineNumber){
