@@ -28,11 +28,12 @@ public class SyntacticAnalyzer {
 
 	public void analyze() throws UnexpectedSymbolException {
 
-		//for (int i = 0;i < lexemesList.size();i++)
-		//{
+		try {
 			this.program();
-			//this.advance();
-		//}
+		} catch (Exception e){
+			
+		}
+
 	}
 	
 	private void consume(TokenType type) {
