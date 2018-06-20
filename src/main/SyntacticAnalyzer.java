@@ -97,6 +97,7 @@ public class SyntacticAnalyzer {
 			this.throwError(new UnexpectedTokenException("InvalidExpressionException", 0, 0, this.currentLexeme, null));
 		}
 	}
+	
 	private void var()
 			throws UnexpectedTokenException {
 		
@@ -309,7 +310,7 @@ public class SyntacticAnalyzer {
 	private void expr() 
 			throws UnexpectedTokenException {
 		
-		if (this.isUNOP()) {
+		if (this.isUNOP() || this.isBINOP()) {
 			this.consume(TokenType.SYMBOL);
 			this.expr();
 		} else if (this.isLoc() && !isFuncCall()) {
@@ -339,6 +340,10 @@ public class SyntacticAnalyzer {
 			this.expr();
 		} else {
 			this.throwError(new UnexpectedExpressionException(0, 0, this.currentLexeme, null));
+		}
+		
+		if (this.isBINOP()) {
+			this.expr();
 		}
 	}
 	
@@ -464,22 +469,20 @@ public class SyntacticAnalyzer {
 	
 	private boolean isUNOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
-				(this.currentToken.equals("++") ||
-				 this.currentToken.equals("--") ||
+				(this.currentToken.equals("+")||
+				 this.currentToken.equals("-")||
+				 this.currentToken.equals("*")||
+				 this.currentToken.equals("/")||
+				 this.currentToken.equals("=")||
+				 this.currentToken.equals(">")||
+				 this.currentToken.equals("<")||
 				 this.currentToken.equals("%")||
 				 this.currentToken.equals("!")));
 	}
 	
 	private boolean isBINOP() {
 		return (this.currentLexeme.tokenType == TokenType.SYMBOL &&
-				(this.currentToken.equals("+")||
-				 this.currentToken.equals("-")||
-				 this.currentToken.equals("*")||
-				 this.currentToken.equals("/")||
-				 this.currentToken.equals("=")||
-				 this.currentToken.equals("==") ||
-				 this.currentToken.equals(">")||
-				 this.currentToken.equals("<")||
+				(this.currentToken.equals("==") ||
 				 this.currentToken.equals(">=") ||
 				 this.currentToken.equals("<=") ||
 				 this.currentToken.equals("!=") ||
