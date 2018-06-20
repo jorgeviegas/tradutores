@@ -160,6 +160,7 @@ public class SyntacticAnalyzer {
 		this.consume(TokenType.SYMBOL);
 
 	}
+	
 	private void stmt()
 			throws UnexpectedTokenException {
 
@@ -340,13 +341,6 @@ public class SyntacticAnalyzer {
 				this.throwError(new UnexpectedSymbolException(0, 0, this.currentLexeme, "]"));
 			}
 		}
-		//} catch (UnexpectedSymbolException e) {
-		//	System.out.println("The \""+e.lexeme.token+"\" symbol is unexpected.");
-		//	
-		//	if (e.expectedSymbol != null && !e.expectedSymbol.isEmpty()) {
-		//		System.out.println("The expected symbol is \""+e.expectedSymbol+"\"");
-		//	}
-		//}
 	}
 	
 	private void funcCall() throws UnexpectedTokenException {
@@ -379,7 +373,7 @@ public class SyntacticAnalyzer {
 			
 			if (this.currentToken.equals(",")) {
 				this.consume(TokenType.SYMBOL);
-			} else if (!this.isExpr()) {
+			} else if (!this.isExpr() && !this.currentToken.equals(")")) {
 				this.throwError(new UnexpectedExpressionException(0, 0, this.currentLexeme, null));
 			}
 		}
