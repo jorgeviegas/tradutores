@@ -525,7 +525,7 @@ public class SyntacticAnalyzer {
 			{
 				return column;
 			}
-			column =+ currentLexeme.getToken().length();
+			column += currentLexeme.getToken().length();
 		}
 
 		return 0;
