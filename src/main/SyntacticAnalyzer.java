@@ -17,6 +17,7 @@ public class SyntacticAnalyzer {
 	private String currentToken;
 	private int currentIndex;
 	private LinkedList<Lexeme> lexemesList;
+	private boolean isConditionalExpression = false;
 
 	public SyntacticAnalyzer(LinkedList<Lexeme> lexemesList) {
 		this.lexemesList = lexemesList;
@@ -174,6 +175,7 @@ public class SyntacticAnalyzer {
 			   this.currentToken.equals("while") ||
 			   this.currentToken.equals("return") ||
 			   this.currentToken.equals("break") ||
+			   this.currentToken.equals("continue") ||
 			   this.currentToken.equals("return")) {
 			this.stmt();
 		}
@@ -228,7 +230,9 @@ public class SyntacticAnalyzer {
 						this.throwError(new UnexpectedSymbolException(0, 0, "("));
 					}
 					
+					this.isConditionalExpression = this.isExpr();
 					this.expr();
+					this.isConditionalExpression = false;
 					
 					if (this.currentToken.equals(")")) {
 						this.consume(TokenType.SYMBOL);
@@ -254,7 +258,9 @@ public class SyntacticAnalyzer {
 						this.throwError(new UnexpectedSymbolException(0, 0, "("));
 					}
 					
+					this.isConditionalExpression = this.isExpr();
 					this.expr();
+					this.isConditionalExpression = false;
 					
 					if (this.currentToken.equals(")")) {
 						this.consume(TokenType.SYMBOL);
@@ -345,7 +351,7 @@ public class SyntacticAnalyzer {
 			this.throwError(new UnexpectedExpressionException(0, 0, null));
 		}
 		
-		if (this.isBINOP()) {
+		if (this.isBINOP() || (this.isUNOP() && !this.isConditionalExpression)) {
 			this.expr();
 		}
 	}
@@ -494,7 +500,7 @@ public class SyntacticAnalyzer {
 	}
 	
 	private boolean isExpr() {
-		return ((this.currentToken == "(" && this.currentLexeme.tokenType == TokenType.SYMBOL) ||
+		return ((this.currentToken.equals("(") && this.currentLexeme.tokenType == TokenType.SYMBOL) ||
 				this.isUNOP() ||
 				this.isLoc() || 
 				this.isFuncCall() ||
