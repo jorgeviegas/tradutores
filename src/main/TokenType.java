@@ -1,6 +1,7 @@
 package main;
 
 public enum TokenType {
+	NONE,
     RESERVED_WORD,
     KEYWORD,
     IDENTIFIER,
