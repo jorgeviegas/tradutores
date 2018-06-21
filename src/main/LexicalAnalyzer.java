@@ -89,6 +89,9 @@ public class LexicalAnalyzer {
                                 } 
                             	
                                 lexema.setLineNumber(lineNumber);
+                            	if (lastLogicalOperator != null) {
+                            	    lastLexeme = null;
+                                }
                                 
                             } else {
                             	lexema = new Lexeme(TokenType.SYMBOL, String.valueOf((char)tokenType), lineNumber);
