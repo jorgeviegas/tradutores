@@ -330,7 +330,13 @@ public class SyntacticAnalyzer {
 			this.lit();
 		} else if (this.currentToken.equals("(")) {
 			this.consume(TokenType.SYMBOL);
+			
+			boolean isParentScopeConditionalExp = this.isConditionalExpression;
+			this.isConditionalExpression = false;
+					
 			this.expr();
+			
+			this.isConditionalExpression = isParentScopeConditionalExp;
 			
 			if (this.currentToken.equals(")")) {
 				this.consume(TokenType.SYMBOL);
@@ -351,7 +357,12 @@ public class SyntacticAnalyzer {
 			this.throwError(new UnexpectedExpressionException(0, 0, null));
 		}
 		
-		if (this.isBINOP() || (this.isUNOP() && !this.isConditionalExpression)) {
+		if (this.isBINOP()) {// || (this.isUNOP() && !this.isConditionalExpression)) {
+			this.expr();
+		} else if (this.isUNOP() && 
+				((this.isConditionalExpression && 
+						(!this.currentToken.equals("+") && !this.currentToken.equals("-") && !this.currentToken.equals("="))) || !this.isConditionalExpression)) {
+			this.consume(TokenType.SYMBOL);
 			this.expr();
 		}
 	}
