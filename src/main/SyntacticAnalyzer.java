@@ -357,7 +357,7 @@ public class SyntacticAnalyzer {
 			this.throwError(new UnexpectedExpressionException(0, 0, null));
 		}
 		
-		if (this.isBINOP()) {// || (this.isUNOP() && !this.isConditionalExpression)) {
+		if (this.isBINOP()) {
 			this.expr();
 		} else if (this.isUNOP() && 
 				((this.isConditionalExpression && 
